@@ -1,2 +1,2 @@
-# IOT_Project
-Casstle Monitor
+# IOP_Mini_Capstone_Project
+Casste Health Monitor
