@@ -37,12 +37,10 @@ unsigned long startTime, thingSpeakTimer, MLXTime, MPUTime;
 //---------------------------
 const float safeThreshold = 29;
 const float safeThreshold2 = 38.5;
-const unsigned long lowTempDuration = 10 * 1000;  // 5 minutes
-const float lowTempThreshold = 0.75;              // 75%
+const unsigned long dangerTempDuration = 15 * 60 * 1000;  // 5 minutes
+const float dangerTempThrehold = 0.75;              // 75%
 unsigned int lowTempCount = 0;
 unsigned int totalCount = 0;
-
-
 
 void setup() {
   Serial.begin(115200);
@@ -101,6 +99,7 @@ void loop() {
     Wire.endTransmission();
     MPUTime = millis();
   }
+
   x_Kalman = filter.updateEstimate(x);
   y_Kalman = filter.updateEstimate(y);
   z_Kalman = filter.updateEstimate(z);
@@ -120,10 +119,10 @@ void loop() {
   totalCount++;
   unsigned long elapsedTime = millis() - startTime;
   // Check if 10s have passed
-  if (elapsedTime >= lowTempDuration) {
-    float lowTempPercentage = (float)lowTempCount / totalCount;
+  if (elapsedTime >= dangerTempDuration) {
+    float dangerTempPercentage = (float)lowTempCount / totalCount;
 
-    if (lowTempPercentage > lowTempThreshold) {
+    if (dangerTempPercentage > dangerTempThrehold) {
       Serial.println("NGUY HIỂM - TESTING");
       bot.sendMessage(CHAT_ID, "Nhiệt độ đạt ngưỡng nguy hiểm!! BÒ CHẾT BÂY GIỜ", "");
     }
@@ -160,4 +159,5 @@ void loop() {
   Serial.println();
 
   // delay(50);
+
 }
